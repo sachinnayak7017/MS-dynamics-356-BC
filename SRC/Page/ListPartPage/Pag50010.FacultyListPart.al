@@ -1,20 +1,18 @@
-page 50004 FacultyList
-{
-    PageType = List;
-    ApplicationArea = All;
-    UsageCategory = Lists;
-    CardPageId = 50003;
-    SourceTable = Faculty;
+namespace ALProject.ALProject;
 
+page 50010 FacultyListPart
+{
+    ApplicationArea = All;
+    Caption = 'FacultyListPart';
+    PageType = ListPart;
+    SourceTable = Faculty;
+    
     layout
     {
         area(Content)
         {
-
             repeater(General)
             {
-                Caption = 'General';
-
                 field("No."; Rec."No.")
                 {
                     ToolTip = 'Specifies the value of the No. field.', Comment = '%';
@@ -36,42 +34,6 @@ page 50004 FacultyList
                     ToolTip = 'Specifies the value of the salary field.', Comment = '%';
                 }
             }
-            // group(FacultyCardPart)
-            // {
-            //     part(Faculty; FacultyCardpart)
-            //     {
-            //         SubPageLink = "No." = field("No.");
-            //     }
-            // }
-            //this is use for Card part
-
-        }
-        // area(FactBoxes)
-        // {
-        //     part(Faculty; FacultyCardpart)
-        //     {
-        //         SubPageLink = "No." = field("No.");
-        //     }
-        // }
-
-
-    }
-
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
-
-                trigger OnAction()
-                begin
-
-                end;
-            }
         }
     }
-
-    var
-        myInt: Integer;
 }

@@ -11,6 +11,10 @@ table 50002 Faculty
         field(2; "Name"; Text[30])
         {
             DataClassification = ToBeClassified;
+            trigger OnValidate()
+            begin
+                Name := UpperCase(name);
+            end;
 
         }
         field(3; "City"; Text[20])
@@ -19,7 +23,17 @@ table 50002 Faculty
         }
         field(4; salary; Decimal)
         {
+
             DataClassification = ToBeClassified;
+            trigger OnValidate()
+            begin
+                if salary < 15000 Then begin
+                    Message('please enter the salary more then 15k');
+                    Clear(salary);
+                end;
+
+            end;
+
         }
         field(5; Depatment; Option)
         {

@@ -41,5 +41,28 @@ page 50006 UniversityList
                 }
             }
         }
+
     }
+    actions
+    {
+        area(Creation)
+        {
+            action(Account)
+            {
+                ApplicationArea = All;
+                Image = Action;
+                RunObject = page "AccountList";
+            }
+        }
+
+    }
+    trigger OnOpenPage()
+    begin
+        // Codeunit.Run(50001);
+
+
+    end;
+
+    var
+        democode: Codeunit 50001;
 }

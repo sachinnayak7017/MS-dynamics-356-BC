@@ -1,10 +1,10 @@
 namespace ALProject.ALProject;
 
-page 50003 FacultyCard
+page 50009 FacultyCardpart
 {
     ApplicationArea = All;
-    Caption = 'FacultyCard';
-    PageType = Card;
+    Caption = 'FacultyListpart';
+    PageType = CardPart;
     SourceTable = Faculty;
 
     layout
@@ -23,13 +23,13 @@ page 50003 FacultyCard
                 {
                     ToolTip = 'Specifies the value of the Name field.', Comment = '%';
                 }
-                field(City; Rec.City)
-                {
-                    ToolTip = 'Specifies the value of the City field.', Comment = '%';
-                }
                 field(Depatment; Rec.Depatment)
                 {
                     ToolTip = 'Specifies the value of the Depatment field.', Comment = '%';
+                }
+                field(City; Rec.City)
+                {
+                    ToolTip = 'Specifies the value of the City field.', Comment = '%';
                 }
                 field(salary; Rec.salary)
                 {
@@ -38,8 +38,5 @@ page 50003 FacultyCard
             }
         }
 
-
     }
-
-
 }
