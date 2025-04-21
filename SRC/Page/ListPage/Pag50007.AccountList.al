@@ -45,6 +45,7 @@ page 50007 AccountList
         {
             action(Approve)
             {
+
                 Caption = 'Approve';
                 Image = Approve;
                 ApplicationArea = All;
