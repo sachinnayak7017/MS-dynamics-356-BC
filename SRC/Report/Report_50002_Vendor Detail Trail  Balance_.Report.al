@@ -56,6 +56,7 @@ report 50002 "Vendor Detail Trail  Balance"
             column(Name_Vendor; Name)
             {
             }
+
             column(PhoneNo_Vendor; "Phone No.")
             {
                 IncludeCaption = true;
@@ -124,6 +125,8 @@ report 50002 "Vendor Detail Trail  Balance"
             column(VendType; ' ')
             {
             }
+
+            column(totalGstAmountbase; totalGstAmountbase) { }
             dataitem("Vendor Ledger Entry"; "Vendor Ledger Entry")
             {
                 CalcFields = "Credit Amount (LCY)", "Debit Amount (LCY)";
@@ -193,7 +196,11 @@ report 50002 "Vendor Detail Trail  Balance"
                 Column(NetAmt; NetAmt)
                 {
                 }
+                Column(TotalGSTAmount; TotalGSTAmount)
+                {
+                }
                 column(TotalNetAmt; TotalNetAmt) { }
+
                 Column(Cmts; Cmts)
                 {
                 }
@@ -406,33 +413,17 @@ report 50002 "Vendor Detail Trail  Balance"
                     DetailedGSTEntryBuffer.SETRANGE("Document No.", "Document No.");
                     if DetailedGSTEntryBuffer.FINDSET then
                         repeat
-                            // case DetailedGSTEntryBuffer."GST Component Code" of 
-                            //     'IGST':
-                            //         begin
-                            //             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
-                            //         end;
-                            //     'CGST':
-                            //         begin
-                            //             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
-                            //         end;
-                            //     'SGST':
-                            //         begin
-                            //             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
-                            //         end;
-                            // end;
                             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
+
                         until DetailedGSTEntryBuffer.NEXT = 0;
-
-
-
-
-
+                    totalGstAmountbase += TotalGSTAmount;
                 end;
 
                 trigger OnPreDataItem()
                 begin
                     VendLedgEntryExists := false;
                     CurrReport.CreateTotals(VendAmount, "Amount (LCY)");
+                    //totalGstAmountbase := 0;
                 end;
             }
             dataitem("Integer"; "Integer")
@@ -621,6 +612,7 @@ report 50002 "Vendor Detail Trail  Balance"
         TotalNetAmt: Decimal;
         DetailedGSTEntryBuffer: Record 18001;
         TotalGSTAmount: Decimal;
+        totalGstAmountbase: Decimal;
     //CIT272 END MOVED FROM NAV TO BC
     procedure InitializeRequest(NewPrintAmountsInLCY: Boolean; NewPrintOnlyOnePerPage: Boolean; NewExcludeBalanceOnly: Boolean)
     begin
