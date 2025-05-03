@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-04-29T11:06:38.8172859Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-05-01T06:46:24.2041128Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -6984,15 +6984,6 @@ End Function
         </Field>
         <Field Name="linetotalGstFormat">
           <DataField>linetotalGstFormat</DataField>
-        </Field>
-        <Field Name="No">
-          <DataField>No</DataField>
-        </Field>
-        <Field Name="CopyText">
-          <DataField>CopyText</DataField>
-        </Field>
-        <Field Name="OutputNo">
-          <DataField>OutputNo</DataField>
         </Field>
       </Fields>
       <Query>

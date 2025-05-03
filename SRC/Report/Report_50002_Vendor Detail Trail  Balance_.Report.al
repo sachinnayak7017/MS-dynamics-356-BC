@@ -411,11 +411,12 @@ report 50002 "Vendor Detail Trail  Balance"
                     DetailedGSTEntryBuffer.RESET;
                     DetailedGSTEntryBuffer.SETRANGE("Transaction Type", DetailedGSTEntryBuffer."Transaction Type"::Purchase);
                     DetailedGSTEntryBuffer.SETRANGE("Document No.", "Document No.");
+                    //   DetailedGSTEntryBuffer.Setfilter("Document No.", '%1..%5',);
                     if DetailedGSTEntryBuffer.FINDSET then
                         repeat
                             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
-
                         until DetailedGSTEntryBuffer.NEXT = 0;
+
                     totalGstAmountbase += TotalGSTAmount;
                 end;
 

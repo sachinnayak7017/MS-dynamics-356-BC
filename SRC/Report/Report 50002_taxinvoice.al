@@ -96,14 +96,7 @@ report 50005 TaxInvoiceReport
                 dataitem(CopyLoop; Integer)
                 {
                     DataItemTableView = SORTING(Number);
-                    dataitem(PageLoop; Integer)
-                    {
 
-                        DataItemTableView = SORTING(Number) WHERE(Number = CONST(1));
-                        column("No"; "Sales Invoice Header"."No.") { }
-                        column("CopyText"; CopyText) { }
-                        column("OutputNo"; OutputNo) { }
-                    }
 
                     trigger OnPreDataItem();
                     begin
@@ -130,8 +123,6 @@ report 50005 TaxInvoiceReport
 
                         OutputNo := Number;
                     end;
-
-
                 }
 
 
