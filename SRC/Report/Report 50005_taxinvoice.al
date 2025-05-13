@@ -121,7 +121,7 @@ report 50005 TaxInvoiceReport
                                 CopyText := 'Copy ' + Format(Number);
                         end;
 
-                        OutputNo := Number;
+                        OutputNo += 1;
                     end;
                 }
 

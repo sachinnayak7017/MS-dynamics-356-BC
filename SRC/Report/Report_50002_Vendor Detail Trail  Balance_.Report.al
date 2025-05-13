@@ -416,7 +416,6 @@ report 50002 "Vendor Detail Trail  Balance"
                         repeat
                             TotalGSTAmount += DetailedGSTEntryBuffer."GST Amount";
                         until DetailedGSTEntryBuffer.NEXT = 0;
-
                     totalGstAmountbase += TotalGSTAmount;
                 end;
 
@@ -614,6 +613,7 @@ report 50002 "Vendor Detail Trail  Balance"
         DetailedGSTEntryBuffer: Record 18001;
         TotalGSTAmount: Decimal;
         totalGstAmountbase: Decimal;
+
     //CIT272 END MOVED FROM NAV TO BC
     procedure InitializeRequest(NewPrintAmountsInLCY: Boolean; NewPrintOnlyOnePerPage: Boolean; NewExcludeBalanceOnly: Boolean)
     begin

@@ -56,12 +56,22 @@ page 50001 StudentList
     {
         area(Processing)
         {
-            action(ActionName)
+            action("RUN Repot")
             {
-
+                Image = Report;
+                Promoted = true;
                 trigger OnAction()
                 begin
-
+                    Report.Run(50000);
+                end;
+            }
+            action("TransferNow")
+            {
+                Image = Report;
+                Promoted = true;
+                trigger OnAction()
+                begin
+                    Report.Run(50008);
                 end;
             }
         }
