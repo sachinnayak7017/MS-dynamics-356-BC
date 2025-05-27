@@ -11,8 +11,8 @@ report 50008 ProcessonlyReport
                 SIH.SetRange("No.", GLE."Document No.");
                 if SIH.FindSet() then begin
                     repeat
-                        "Location code" := SIH."Bill-to Name";
-                        Narration := SIH."Bill-to Address";
+                        "Location code" := SIH."Location Code";
+                        Narration := SIH."Bill-to City";
                         Modify();
                     until SIH.Next() = 0;
                 end;

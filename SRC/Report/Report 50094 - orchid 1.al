@@ -1181,8 +1181,7 @@ report 50094 "orchid 1"
                     IF ShiptoAddress.GET("Sell-to Customer No.","Ship-to Code") THEN BEGIN
                        Ship_Name:=ShiptoAddress.Name;
                        Ship_Add:=ShiptoAddress.Address+ShiptoAddress."Address 2"+ShiptoAddress.City;
-                       Ship_St:=ShiptoAddress.State;
-                       PlaceOfSuply := ShiptoAddress.City;
+                       Ship_St:=ShiptoAddress.State;                       PlaceOfSuply := ShiptoAddress.City;
                        ContactNo := ShiptoAddress."Phone No.";
                        ContctEmail := ShiptoAddress."E-Mail";
                        IF StateRec.GET(Ship_St) THEN BEGIN

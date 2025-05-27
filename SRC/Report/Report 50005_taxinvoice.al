@@ -55,7 +55,39 @@ report 50005 TaxInvoiceReport
             column(Destination_Post_Code; "Bill-to Post Code") { }
             column(External_Document_No_; "External Document No.") { }
 
+            column(V1; V1)
+            {
+            }
+            column(V2; V2)
+            {
+            }
+            column(V3; V3)
+            {
+            }
+            column(V4; V4)
+            {
+            }
+            column(V5; V5)
+            {
+            }
+            column(V6; V6)
+            {
+            }
+            column(V7; V7)
+            {
+            }
+            column(V8; V8)
+            {
+            }
+            column(V9; V9)
+            {
+            }
+            column(V10; V10)
+            {
+            }
+
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
+
             {
                 DataItemLink = "Document No." = field("No.");
                 column(Document_No_; "Document No.") { }
@@ -87,15 +119,18 @@ report 50005 TaxInvoiceReport
                 column(GSTRate; ABS(IGST_Perc) + ABS(CGST_Perc) + Abs(SGST_Perc)) { }
                 column(Line_Amount; "Line Amount") { }
                 column(TotalLineamount; TotalLineamount) { }
+
                 column(Totalamount; Totalamount) { }
                 column(TotaltaxAmount; TotaltaxAmount) { }
-                // column(TaxAmount_SalesInvoiceLine; ABS(IGST_Amt) + ABS(CGST_Amt) + ABS(SGST_Amt)) { }
                 column(AmtInWord; NumTxt[1] + NumTxt[2]) { }
                 column(AmtInWordtax; NumTxt1[1] + NumTxt1[2]) { }
                 column(linetotalGst; linetotalGst) { }
+                column(PageGroup; PageGroup) { }
                 dataitem(CopyLoop; Integer)
                 {
                     DataItemTableView = SORTING(Number);
+                    column(Outputno; OutputNo) { }
+                    column(CopyText; CopyText) { }
 
 
                     trigger OnPreDataItem();
@@ -129,6 +164,8 @@ report 50005 TaxInvoiceReport
                 trigger OnAfterGetRecord();
                 begin
                     S_No += 1;
+                    PageGroup := (S_No - 1) div 10 + 1;
+
                     IsInterState := ("Sales Invoice Header"."GST Bill-to State Code" <> Comp."State Code") or
                                     ("Sales Invoice Header"."Bill-to Country/Region Code" <> Comp."Country/Region Code");
 
@@ -184,28 +221,61 @@ report 50005 TaxInvoiceReport
                                         end;
                                 end;
                             until DetailedGSTEntryBuffer.NEXT = 0;
+
+                        DetailedGSTEntryBuffer.RESET;
+                        DetailedGSTEntryBuffer.SETRANGE("Transaction Type", DetailedGSTEntryBuffer."Transaction Type"::Sales);
+                        DetailedGSTEntryBuffer.SETRANGE("Document No.", "Document No.");
+                        IF DetailedGSTEntryBuffer.FINDSET THEN
+                            REPEAT
+                                TotaltaxAmount += ABS(DetailedGSTEntryBuffer."GST Amount");
+                            UNTIL DetailedGSTEntryBuffer.NEXT = 0;
+                        CheckRep.InitTextVariable;
+                        CheckRep.FormatNoText(NumTxt1, TotaltaxAmount, "Sales Invoice Header"."Currency Code");
+
+
+                        "Sales Invoice Header".CalcFields(Amount);
+                        TotalLineamount := "Sales Invoice Header".Amount;
+                        DiscountAmt += "Sales Invoice Line"."Line Discount Amount";
+                        TotalAmount := TotaltaxAmount + TotalLineamount;
+                        CheckRep.InitTextVariable;
+                        CheckRep.FormatNoText(NumTxt, TotalAmount, "Sales Invoice Header"."Currency Code");
                     end;
-
-                    DetailedGSTEntryBuffer.RESET;
-                    DetailedGSTEntryBuffer.SETRANGE("Transaction Type", DetailedGSTEntryBuffer."Transaction Type"::Sales);
-                    DetailedGSTEntryBuffer.SETRANGE("Document No.", "Document No.");
-                    IF DetailedGSTEntryBuffer.FINDSET THEN
-                        REPEAT
-                            TotaltaxAmount += ABS(DetailedGSTEntryBuffer."GST Amount");
-                        UNTIL DetailedGSTEntryBuffer.NEXT = 0;
-                    CheckRep.InitTextVariable;
-                    CheckRep.FormatNoText(NumTxt1, TotaltaxAmount, "Sales Invoice Header"."Currency Code");
-
-
-                    "Sales Invoice Header".CalcFields(Amount);
-                    TotalLineamount := "Sales Invoice Header".Amount;
-                    DiscountAmt += "Sales Invoice Line"."Line Discount Amount";
-                    TotalAmount := TotaltaxAmount + TotalLineamount;
-                    CheckRep.InitTextVariable;
-                    CheckRep.FormatNoText(NumTxt, TotalAmount, "Sales Invoice Header"."Currency Code");
 
                 end;
             }
+
+            trigger OnAfterGetRecord()
+            begin
+                S_No2 := 0;
+                PageGroup := 0;
+
+                SalseInvLine.RESET;
+                SalseInvLine.SETCURRENTKEY("Document No.", "No.");
+                SalseInvLine.SETRANGE("Document No.", "No.");
+                SalseInvLine.SETFILTER("No.", '<>%1', '46000051');
+                SalseInvLine.SETFILTER(Quantity, '<>%1', 0);
+                IF SalseInvLine.FINDFIRST THEN
+                    REPEAT
+                        S_No2 += 1;
+                    UNTIL SalseInvLine.NEXT = 0;
+
+
+                V1 := FALSE;
+                V2 := FALSE;
+                V3 := FALSE;
+                V4 := FALSE;
+                V5 := FALSE;
+                V6 := FALSE;
+                V7 := FALSE;
+                V8 := FALSE;
+                V9 := FALSE;
+                V10 := FALSE;
+                SetRowVisibility(S_No2);
+
+            end;
+
+
+
         }
     }
 
@@ -225,7 +295,7 @@ report 50005 TaxInvoiceReport
                     {
                         ApplicationArea = All;
                         Caption = 'Additional Copies';
-                        // ToolTip = 'Enter how many extra copies to print (beyond the original).';
+
                     }
                     field(customGstRate; customGstRate)
                     {
@@ -259,6 +329,25 @@ report 50005 TaxInvoiceReport
 
     end;
 
+
+    local procedure SetRowVisibility(LineCount: Integer)
+    var
+        Rem: Integer;
+        CountTrue: Integer;
+    begin
+        Rem := LineCount MOD 10;
+        CountTrue := (10 - Rem) MOD 10;
+        V1 := (CountTrue >= 1);
+        V2 := (CountTrue >= 2);
+        V3 := (CountTrue >= 3);
+        V4 := (CountTrue >= 4);
+        V5 := (CountTrue >= 5);
+        V6 := (CountTrue >= 6);
+        V7 := (CountTrue >= 7);
+        V8 := (CountTrue >= 8);
+        V9 := (CountTrue >= 9);
+    end;
+
     var
         S_No: Integer;
         comp: Record 79;
@@ -266,6 +355,7 @@ report 50005 TaxInvoiceReport
         NumTxt: array[2] of Text[250];
         NumTxt1: array[2] of Text[250];
         CheckRep: Report "Posted Voucher";
+        SalseInvLine: Record 113;
         IGST_Perc: Decimal;
         IGST_Amt: Decimal;
         CGST_Perc: Decimal;
@@ -284,4 +374,21 @@ report 50005 TaxInvoiceReport
         FormatDocument: Codeunit "Format Document";
         DiscountAmt: Integer;
         linetotalGst: Decimal;
+        V1: Boolean;
+        V2: Boolean;
+        V3: Boolean;
+        V4: Boolean;
+        V5: Boolean;
+        V6: Boolean;
+        V7: Boolean;
+        V8: Boolean;
+        V9: Boolean;
+        V10: Boolean;
+        V11: Boolean;
+        V12: Boolean;
+        V13: Boolean;
+        V14: Boolean;
+        V15: Boolean;
+        S_No2: Integer;
+        PageGroup: Integer;
 }
